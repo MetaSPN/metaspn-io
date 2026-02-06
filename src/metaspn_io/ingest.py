@@ -1,9 +1,8 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from typing import Any
 
 from metaspn_io.adapters.base import AdapterOptions
 from metaspn_io.adapters.registry import AdapterRegistry
@@ -26,12 +25,31 @@ def _parse_range(value: str | None) -> datetime | None:
     return ts
 
 
+def _parse_date_window(day: str | None) -> tuple[datetime | None, datetime | None]:
+    if day is None:
+        return None, None
+    start = datetime.fromisoformat(day).replace(tzinfo=timezone.utc)
+    end = start + timedelta(days=1) - timedelta(microseconds=1)
+    return start, end
+
+
+def _resolve_output_path(out: Path | None, day: str | None) -> Path | None:
+    if out is None:
+        return None
+    if day is None:
+        return out
+    if out.suffix == ".jsonl":
+        return out
+    return out / f"{day}.jsonl"
+
+
 def run_ingest(
     registry: AdapterRegistry,
     adapter_name: str,
     source: Path,
     out: Path | None = None,
     store: Path | None = None,
+    day: str | None = None,
     since: str | None = None,
     until: str | None = None,
     dry_run: bool = False,
@@ -40,10 +58,14 @@ def run_ingest(
     error_log_path: Path | None = None,
 ) -> IngestResult:
     adapter = registry.get(adapter_name)
+    date_since, date_until = _parse_date_window(day)
+    parsed_since = _parse_range(since)
+    parsed_until = _parse_range(until)
+    resolved_out = _resolve_output_path(out, day)
 
     options = AdapterOptions(
-        since=_parse_range(since),
-        until=_parse_range(until),
+        since=parsed_since or date_since,
+        until=parsed_until or date_until,
         lenient=lenient,
     )
 
@@ -55,8 +77,8 @@ def run_ingest(
         error_log = Path("workspace/logs/ingest_errors.jsonl")
 
     if not dry_run:
-        if out is not None:
-            write_jsonl(out, signals)
+        if resolved_out is not None:
+            write_jsonl(resolved_out, signals)
         if store is not None:
             for signal in signals:
                 day = str(signal["timestamp"])[:10]
@@ -82,6 +104,6 @@ def run_ingest(
     return IngestResult(
         emitted=len(signals),
         errors=len(issues),
-        output=out,
+        output=resolved_out,
         error_log=error_log,
     )

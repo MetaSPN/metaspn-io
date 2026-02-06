@@ -19,6 +19,7 @@ def build_parser() -> argparse.ArgumentParser:
     ingest.add_argument("--source", required=True)
     ingest.add_argument("--out")
     ingest.add_argument("--store")
+    ingest.add_argument("--date", help="UTC date window to ingest (YYYY-MM-DD)")
     ingest.add_argument("--since")
     ingest.add_argument("--until")
     ingest.add_argument("--dry-run", action="store_true")
@@ -46,6 +47,7 @@ def main(argv: list[str] | None = None) -> int:
         source=Path(args.source),
         out=Path(args.out) if args.out else None,
         store=Path(args.store) if args.store else None,
+        day=args.date,
         since=args.since,
         until=args.until,
         dry_run=args.dry_run,

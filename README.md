@@ -7,7 +7,8 @@
 python -m metaspn_io io ingest \
   --adapter social_jsonl_v1 \
   --source tests/fixtures/social \
-  --out /tmp/social-signals.jsonl \
+  --date 2026-02-05 \
+  --out /tmp/social-signals \
   --stats
 ```
 
@@ -68,13 +69,19 @@ metaspn io ingest --adapter social_jsonl_v1 --source raw/social --out workspace/
 
 Supported flags:
 - `--source` file or directory
-- `--out` output JSONL path
+- `--out` output JSONL path or directory (with `--date`, writes `<out>/<date>.jsonl`)
 - `--store` optional store root (writes to `<store>/signals/YYYY-MM-DD.jsonl`)
+- `--date` one-day UTC ingest window (`YYYY-MM-DD`)
 - `--since` ISO timestamp lower bound
 - `--until` ISO timestamp upper bound
 - `--dry-run`
 - `--stats`
 - `--lenient`
+
+Demo orchestrator invocation:
+```bash
+metaspn io ingest --adapter social_jsonl_v1 --source raw/social --date 2026-02-05 --out workspace/store/signals
+```
 
 Default mode is strict: bad records are skipped and logged to `workspace/logs/ingest_errors.jsonl` unless overridden.
 
