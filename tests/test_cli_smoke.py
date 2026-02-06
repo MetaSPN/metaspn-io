@@ -12,7 +12,12 @@ FIXTURES = Path(__file__).parent / "fixtures" / "social"
 
 def test_default_registry_contains_demo_adapters() -> None:
     registry = default_registry()
-    assert registry.names() == ["outcomes_jsonl_v1", "social_jsonl_v1"]
+    assert registry.names() == [
+        "outcomes_jsonl_v1",
+        "pumpfun_v1",
+        "social_jsonl_v1",
+        "solana_rpc_v1",
+    ]
 
 
 def test_cli_ingest_smoke_date_partition() -> None:

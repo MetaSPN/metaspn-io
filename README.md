@@ -15,6 +15,8 @@ python -m metaspn_io io ingest \
 ## v0.1 Adapters
 - `social_jsonl_v1` (MUST): browser-extension social JSONL (`post_seen`, `profile_seen`)
 - `outcomes_jsonl_v1` (SHOULD): manual outcomes JSONL (`message_sent`, `reply_received`, `meeting_booked`, `revenue_event`)
+- `solana_rpc_v1`: token/platform JSONL (`trade`, `holder_change`, `supply_change`, `liquidity_event`, `metadata_update`, `reward_update`)
+- `pumpfun_v1` (experimental): pump.fun token JSONL (same canonical token event mapping)
 
 ## Schema Mapping
 | Input adapter | Input `type` | Output payload |
@@ -25,6 +27,12 @@ python -m metaspn_io io ingest \
 | `outcomes_jsonl_v1` | `reply_received` | `ReplyReceived` |
 | `outcomes_jsonl_v1` | `meeting_booked` | `MeetingBooked` |
 | `outcomes_jsonl_v1` | `revenue_event` | `RevenueEvent` |
+| `solana_rpc_v1` / `pumpfun_v1` | `trade` | `TokenTradeSeen` |
+| `solana_rpc_v1` / `pumpfun_v1` | `holder_change` | `HolderChangeSeen` |
+| `solana_rpc_v1` / `pumpfun_v1` | `supply_change` | `SupplyChangeSeen` |
+| `solana_rpc_v1` / `pumpfun_v1` | `liquidity_event` | `LiquidityEventSeen` |
+| `solana_rpc_v1` / `pumpfun_v1` | `metadata_update` | `TokenMetadataUpdated` |
+| `solana_rpc_v1` / `pumpfun_v1` | `reward_update` | `RewardUpdated` |
 
 ## Output Envelope
 JSONL lines are emitted as canonical envelopes:
@@ -121,8 +129,8 @@ python3 -m pytest -q
 ## Publishing
 `publish.yml` publishes to PyPI when you push a version tag:
 ```bash
-git tag -a v0.1.2 -m "v0.1.2"
-git push origin v0.1.2
+git tag -a v0.1.3 -m "v0.1.3"
+git push origin v0.1.3
 ```
 Configure PyPI trusted publishing for this GitHub repository, then the workflow will upload `dist/*` automatically.
 Before tagging, ensure CI (`.github/workflows/ci.yml`) is green, which validates `python3 -m pytest -q` and package build artifacts.

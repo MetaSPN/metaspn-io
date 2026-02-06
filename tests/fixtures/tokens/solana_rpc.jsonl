@@ -1,0 +1,6 @@
+{"type":"trade","chain":"solana","token_mint":"So11111111111111111111111111111111111111112","wallet":"w1","side":"buy","amount":10.5,"price_usd":1.25,"timestamp":"2026-02-06T10:00:00Z"}
+{"type":"holder_change","chain":"solana","token_mint":"So11111111111111111111111111111111111111112","wallet":"w2","delta":-2.0,"timestamp":"2026-02-06T10:05:00Z"}
+{"type":"supply_change","chain":"solana","token_mint":"So11111111111111111111111111111111111111112","new_supply":1000000,"delta":500,"timestamp":"2026-02-06T10:06:00Z"}
+{"type":"liquidity_event","chain":"solana","token_mint":"So11111111111111111111111111111111111111112","pool":"raydium-1","action":"add","amount":2000,"timestamp":"2026-02-06T10:07:00Z"}
+{"type":"metadata_update","chain":"solana","token_mint":"So11111111111111111111111111111111111111112","field":"symbol","value":"SOLX","timestamp":"2026-02-06T10:08:00Z"}
+{"type":"reward_update","chain":"solana","token_mint":"So11111111111111111111111111111111111111112","wallet":"w3","program":"staking-v1","amount":9.5,"timestamp":"2026-02-06T10:09:00Z"}

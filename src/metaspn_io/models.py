@@ -78,6 +78,67 @@ except Exception:
         amount: float
         currency: str = "USD"
 
+try:
+    from metaspn_schemas import (  # type: ignore[attr-defined]
+        HolderChangeSeen,
+        LiquidityEventSeen,
+        RewardUpdated,
+        SupplyChangeSeen,
+        TokenMetadataUpdated,
+        TokenTradeSeen,
+    )
+except Exception:
+    @dataclass(frozen=True)
+    class TokenTradeSeen:
+        chain: str
+        token_mint: str
+        wallet: str
+        side: str
+        amount: float
+        price_usd: float | None = None
+
+
+    @dataclass(frozen=True)
+    class HolderChangeSeen:
+        chain: str
+        token_mint: str
+        wallet: str
+        delta: float
+
+
+    @dataclass(frozen=True)
+    class SupplyChangeSeen:
+        chain: str
+        token_mint: str
+        new_supply: float
+        delta: float | None = None
+
+
+    @dataclass(frozen=True)
+    class LiquidityEventSeen:
+        chain: str
+        token_mint: str
+        pool: str
+        action: str
+        amount: float
+
+
+    @dataclass(frozen=True)
+    class TokenMetadataUpdated:
+        chain: str
+        token_mint: str
+        field: str
+        value: str
+
+
+    @dataclass(frozen=True)
+    class RewardUpdated:
+        chain: str
+        token_mint: str
+        wallet: str
+        program: str
+        amount: float
+
 
 @dataclass(frozen=True)
 class SignalEnvelope:
@@ -114,6 +175,12 @@ PAYLOAD_TYPES: dict[str, type] = {
     "ReplyReceived": ReplyReceived,
     "MeetingBooked": MeetingBooked,
     "RevenueEvent": RevenueEvent,
+    "TokenTradeSeen": TokenTradeSeen,
+    "HolderChangeSeen": HolderChangeSeen,
+    "SupplyChangeSeen": SupplyChangeSeen,
+    "LiquidityEventSeen": LiquidityEventSeen,
+    "TokenMetadataUpdated": TokenMetadataUpdated,
+    "RewardUpdated": RewardUpdated,
 }
 
 
