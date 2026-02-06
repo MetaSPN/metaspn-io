@@ -115,13 +115,14 @@ Register it in `metaspn_io.adapters.default_registry()`.
 
 ## Tests
 ```bash
-PYTHONPATH=src python -m unittest discover -s tests -v
+python3 -m pytest -q
 ```
 
 ## Publishing
 `publish.yml` publishes to PyPI when you push a version tag:
 ```bash
-git tag -a v0.1.0 -m "v0.1.0"
-git push origin v0.1.0
+git tag -a v0.1.2 -m "v0.1.2"
+git push origin v0.1.2
 ```
 Configure PyPI trusted publishing for this GitHub repository, then the workflow will upload `dist/*` automatically.
+Before tagging, ensure CI (`.github/workflows/ci.yml`) is green, which validates `python3 -m pytest -q` and package build artifacts.
