@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "metaspn-io"
+version = "0.1.0"
+description = "Deterministic ingestion and normalization for MetaSPN"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+  { name = "MetaSPN" }
+]
+dependencies = [
+  "metaspn-schemas"
+]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Operating System :: OS Independent",
+  "Topic :: Software Development :: Libraries",
+]
+keywords = ["metaspn", "ingestion", "signals", "normalization"]
+
+[project.urls]
+Homepage = "https://github.com/MetaSPN/metaspn-io"
+Repository = "https://github.com/MetaSPN/metaspn-io"
+Issues = "https://github.com/MetaSPN/metaspn-io/issues"
+
+[project.scripts]
+metaspn = "metaspn_io.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]

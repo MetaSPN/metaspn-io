@@ -1,0 +1,4 @@
+{"type":"message_sent","source":"manual","actor":"prospect-a","channel":"email","subject":"intro","timestamp":"2026-02-05T15:00:00Z"}
+{"type":"reply_received","source":"manual","actor":"prospect-a","channel":"email","subject":"re:intro","timestamp":"2026-02-05T17:00:00Z"}
+{"type":"meeting_booked","source":"manual","actor":"prospect-a","meeting_id":"m-001","timestamp":"2026-02-06T10:00:00+01:00"}
+{"type":"revenue_event","source":"manual","actor":"acme","amount":1200.5,"currency":"USD","timestamp":"2026-02-07T12:00:00Z"}

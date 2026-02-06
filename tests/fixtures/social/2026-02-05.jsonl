@@ -1,0 +1,3 @@
+{"platform":"twitter","type":"post_seen","author_handle":"alice","text":"hello world","url":"https://x.com/alice/status/1","timestamp":"2026-02-05T12:00:00Z"}
+{"platform":"linkedin","type":"profile_seen","author_handle":"bob","url":"https://linkedin.com/in/bob","timestamp":"2026-02-05T11:00:00-05:00"}
+{"platform":"twitter","type":"post_seen","author_handle":"charlie","text":"later post","url":"https://x.com/charlie/status/2","timestamp":"2026-02-05T13:00:00Z"}
