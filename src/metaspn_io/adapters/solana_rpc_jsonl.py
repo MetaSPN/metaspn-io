@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 
@@ -11,7 +11,9 @@ from metaspn_io.io_utils import ParseIssue, iter_jsonl_records
 from metaspn_io.models import (
     HolderChangeSeen,
     LiquidityEventSeen,
+    MetatowelVolumeWindowSeen,
     RewardUpdated,
+    RewardPoolFundingSeen,
     SCHEMA_VERSION,
     SupplyChangeSeen,
     TokenMetadataUpdated,
@@ -72,12 +74,11 @@ class SolanaRpcAdapter:
 
         raw_ts = data.get("timestamp")
         try:
-            ts, original_tz = parse_timestamp(raw_ts) if raw_ts is not None else parse_timestamp(datetime.now(timezone.utc))
+            ts, original_tz = parse_timestamp(raw_ts) if raw_ts is not None else parse_timestamp("1970-01-01T00:00:00Z")
         except TimestampError as exc:
             if not options.lenient:
                 raise ValueError(str(exc)) from exc
-            ts, original_tz = parse_timestamp(datetime.now(timezone.utc))
-        ingested_at, _ = parse_timestamp(datetime.now(timezone.utc))
+            ts, original_tz = parse_timestamp("1970-01-01T00:00:00Z")
 
         payload, key = self._map_payload(chain, event_type, token_mint, wallet, data, options)
 
@@ -90,7 +91,7 @@ class SolanaRpcAdapter:
             payload=payload,
             entity_refs=[EntityRef(kind="platform_identifier", platform=chain, identifier=token_mint or "unknown")],
             trace=TraceContext(
-                ingested_at=utc_iso(ingested_at),
+                ingested_at=utc_iso(ts),
                 input_file=input_file,
                 input_line_number=line_number,
                 adapter_name=self.name,
@@ -162,6 +163,35 @@ class SolanaRpcAdapter:
                 amount=float(data.get("amount", 0.0)),
             )
             key = f"reward_update|{payload.token_mint}|{payload.wallet}|{payload.program}|{payload.amount:.8f}"
+        elif event_type == "metatowel_volume_window":
+            payload = MetatowelVolumeWindowSeen(
+                chain=chain,
+                token_mint=token_mint or "$METATOWEL",
+                window_start=str(data.get("window_start", "")),
+                window_end=str(data.get("window_end", "")),
+                buy_volume=float(data.get("buy_volume", 0.0)),
+                sell_volume=float(data.get("sell_volume", 0.0)),
+                trade_count=int(data.get("trade_count", 0)),
+            )
+            key = (
+                "metatowel_volume_window|"
+                f"{payload.token_mint}|{payload.window_start}|{payload.window_end}|"
+                f"{payload.buy_volume:.8f}|{payload.sell_volume:.8f}|{payload.trade_count}"
+            )
+        elif event_type == "reward_pool_funding":
+            payload = RewardPoolFundingSeen(
+                chain=chain,
+                token_mint=token_mint or "$METATOWEL",
+                pool=str(data.get("pool", "unknown")),
+                funder=wallet or "unknown",
+                amount=float(data.get("amount", 0.0)),
+                currency=str(data.get("currency", "USDC")),
+            )
+            key = (
+                "reward_pool_funding|"
+                f"{payload.token_mint}|{payload.pool}|{payload.funder}|"
+                f"{payload.amount:.8f}|{payload.currency}"
+            )
         else:
             if not options.lenient:
                 raise ValueError(f"unsupported type: {event_type}")

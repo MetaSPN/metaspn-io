@@ -1,0 +1,7 @@
+{"type":"stake","chain":"solana","season_id":"s1","game_id":"g2","wallet":"staker-1","amount":15.0,"timestamp":"2026-02-07T13:03:00Z"}
+{"type":"season_init","chain":"solana","season_id":"s1","game_id":"g2","timestamp":"2026-02-07T13:00:00Z"}
+{"type":"game_create","chain":"solana","season_id":"s1","game_id":"g2","wallet":"creator-1","timestamp":"2026-02-07T13:01:00Z"}
+{"type":"distribute","chain":"solana","season_id":"s1","game_id":"g2","pool":"reward-pool-1","amount":250.0,"timestamp":"2026-02-07T13:02:00Z"}
+{"type":"claim","chain":"solana","season_id":"s1","game_id":"g2","wallet":"winner-1","amount":175.0,"timestamp":"2026-02-07T13:05:00Z"}
+{"type":"end","chain":"solana","season_id":"s1","game_id":"g2","status":"closed","timestamp":"2026-02-07T13:04:00Z"}
+{"type":"unsupported","chain":"solana","season_id":"s1","game_id":"g2","timestamp":"2026-02-07T13:06:00Z"}

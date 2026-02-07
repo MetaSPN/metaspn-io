@@ -15,8 +15,9 @@ python -m metaspn_io io ingest \
 ## v0.1 Adapters
 - `social_jsonl_v1` (MUST): browser-extension social JSONL (`post_seen`, `profile_seen`)
 - `outcomes_jsonl_v1` (SHOULD): manual outcomes JSONL (`message_sent`, `reply_received`, `meeting_booked`, `revenue_event`)
-- `solana_rpc_v1`: token/platform JSONL (`trade`, `holder_change`, `supply_change`, `liquidity_event`, `metadata_update`, `reward_update`)
+- `solana_rpc_v1`: token/platform JSONL (`trade`, `holder_change`, `supply_change`, `liquidity_event`, `metadata_update`, `reward_update`, `metatowel_volume_window`, `reward_pool_funding`)
 - `pumpfun_v1` (experimental): pump.fun token JSONL (same canonical token event mapping)
+- `season1_onchain_jsonl_v1`: Season 1 chain JSONL (`season_init`, `game_create`, `distribute`, `stake`, `end`, `claim`)
 
 ## Schema Mapping
 | Input adapter | Input `type` | Output payload |
@@ -33,6 +34,14 @@ python -m metaspn_io io ingest \
 | `solana_rpc_v1` / `pumpfun_v1` | `liquidity_event` | `LiquidityEventSeen` |
 | `solana_rpc_v1` / `pumpfun_v1` | `metadata_update` | `TokenMetadataUpdated` |
 | `solana_rpc_v1` / `pumpfun_v1` | `reward_update` | `RewardUpdated` |
+| `solana_rpc_v1` | `metatowel_volume_window` | `MetatowelVolumeWindowSeen` |
+| `solana_rpc_v1` | `reward_pool_funding` | `RewardPoolFundingSeen` |
+| `season1_onchain_jsonl_v1` | `season_init` | `SeasonInitialized` |
+| `season1_onchain_jsonl_v1` | `game_create` | `SeasonGameCreated` |
+| `season1_onchain_jsonl_v1` | `distribute` | `SeasonRewardDistributed` |
+| `season1_onchain_jsonl_v1` | `stake` | `SeasonStakeRecorded` |
+| `season1_onchain_jsonl_v1` | `end` | `SeasonEnded` |
+| `season1_onchain_jsonl_v1` | `claim` | `SeasonRewardClaimed` |
 
 ## Output Envelope
 JSONL lines are emitted as canonical envelopes:
@@ -89,6 +98,25 @@ Supported flags:
 Demo orchestrator invocation:
 ```bash
 metaspn io ingest --adapter social_jsonl_v1 --source raw/social --date 2026-02-05 --out workspace/store/signals
+```
+
+Daily Season 1 run examples:
+```bash
+metaspn io ingest \
+  --adapter season1_onchain_jsonl_v1 \
+  --source raw/chain/season1 \
+  --date 2026-02-07 \
+  --out workspace/store/season1-signals \
+  --stats
+```
+
+```bash
+metaspn io ingest \
+  --adapter solana_rpc_v1 \
+  --source raw/tokens/season1 \
+  --date 2026-02-07 \
+  --out workspace/store/token-signals \
+  --stats
 ```
 
 Default mode is strict: bad records are skipped and logged to `workspace/logs/ingest_errors.jsonl` unless overridden.

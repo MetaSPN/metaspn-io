@@ -13,9 +13,11 @@ def test_solana_rpc_adapter_maps_all_token_event_types() -> None:
     adapter = SolanaRpcAdapter()
     signals = list(adapter.iter_signals(FIXTURES / "solana_rpc.jsonl", options=AdapterOptions()))
 
-    assert len(signals) == 6
+    assert len(signals) == 8
     assert [s.payload_type for s in signals] == [
         "TokenTradeSeen",
+        "MetatowelVolumeWindowSeen",
+        "RewardPoolFundingSeen",
         "HolderChangeSeen",
         "SupplyChangeSeen",
         "LiquidityEventSeen",

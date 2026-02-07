@@ -1,0 +1,5 @@
+{"type":"season_init","chain":"solana","season_id":"s1","timestamp":"2026-02-07T12:00:00Z"}
+{"type":"unknown_event","chain":"solana","season_id":"s1","timestamp":"2026-02-07T12:05:00Z"}
+{"type":"claim","chain":"solana","season_id":"s1","game_id":"g1","wallet":"wallet-a","amount":10.0,"timestamp":"bad-time"}
+not json
+{"type":"end","chain":"solana","season_id":"s1","game_id":"g1","timestamp":"2026-02-07T17:00:00Z"}

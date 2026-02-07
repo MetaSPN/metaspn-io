@@ -84,13 +84,11 @@ class SocialJsonlAdapter:
             platform = "unknown"
 
         try:
-            ts, original_tz = parse_timestamp(raw_ts) if raw_ts is not None else parse_timestamp(datetime.now(timezone.utc))
+            ts, original_tz = parse_timestamp(raw_ts) if raw_ts is not None else parse_timestamp("1970-01-01T00:00:00Z")
         except TimestampError as exc:
             if not options.lenient:
                 raise ValueError(str(exc)) from exc
-            ts, original_tz = parse_timestamp(datetime.now(timezone.utc))
-
-        ingested_at, _ = parse_timestamp(datetime.now(timezone.utc))
+            ts, original_tz = parse_timestamp("1970-01-01T00:00:00Z")
 
         if typ == "post_seen":
             payload = SocialPostSeen(
@@ -122,7 +120,7 @@ class SocialJsonlAdapter:
 
         signal_id = stable_signal_id(platform, ts, stable_key)
         trace = TraceContext(
-            ingested_at=utc_iso(ingested_at),
+            ingested_at=utc_iso(ts),
             input_file=input_file,
             input_line_number=line_number,
             adapter_name=self.name,

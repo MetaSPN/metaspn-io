@@ -82,7 +82,9 @@ try:
     from metaspn_schemas import (  # type: ignore[attr-defined]
         HolderChangeSeen,
         LiquidityEventSeen,
+        MetatowelVolumeWindowSeen,
         RewardUpdated,
+        RewardPoolFundingSeen,
         SupplyChangeSeen,
         TokenMetadataUpdated,
         TokenTradeSeen,
@@ -140,6 +142,87 @@ except Exception:
         amount: float
 
 
+    @dataclass(frozen=True)
+    class MetatowelVolumeWindowSeen:
+        chain: str
+        token_mint: str
+        window_start: str
+        window_end: str
+        buy_volume: float
+        sell_volume: float
+        trade_count: int
+
+
+    @dataclass(frozen=True)
+    class RewardPoolFundingSeen:
+        chain: str
+        token_mint: str
+        pool: str
+        funder: str
+        amount: float
+        currency: str
+
+
+try:
+    from metaspn_schemas import (  # type: ignore[attr-defined]
+        SeasonEnded,
+        SeasonGameCreated,
+        SeasonInitialized,
+        SeasonRewardClaimed,
+        SeasonRewardDistributed,
+        SeasonStakeRecorded,
+    )
+except Exception:
+    @dataclass(frozen=True)
+    class SeasonInitialized:
+        chain: str
+        season_id: str
+        game_id: str | None = None
+
+
+    @dataclass(frozen=True)
+    class SeasonGameCreated:
+        chain: str
+        season_id: str
+        game_id: str
+        creator: str
+
+
+    @dataclass(frozen=True)
+    class SeasonRewardDistributed:
+        chain: str
+        season_id: str
+        game_id: str
+        pool: str
+        amount: float
+
+
+    @dataclass(frozen=True)
+    class SeasonStakeRecorded:
+        chain: str
+        season_id: str
+        game_id: str
+        wallet: str
+        amount: float
+
+
+    @dataclass(frozen=True)
+    class SeasonEnded:
+        chain: str
+        season_id: str
+        game_id: str
+        status: str = "ended"
+
+
+    @dataclass(frozen=True)
+    class SeasonRewardClaimed:
+        chain: str
+        season_id: str
+        game_id: str
+        wallet: str
+        amount: float
+
+
 @dataclass(frozen=True)
 class SignalEnvelope:
     schema_version: str
@@ -181,6 +264,14 @@ PAYLOAD_TYPES: dict[str, type] = {
     "LiquidityEventSeen": LiquidityEventSeen,
     "TokenMetadataUpdated": TokenMetadataUpdated,
     "RewardUpdated": RewardUpdated,
+    "MetatowelVolumeWindowSeen": MetatowelVolumeWindowSeen,
+    "RewardPoolFundingSeen": RewardPoolFundingSeen,
+    "SeasonInitialized": SeasonInitialized,
+    "SeasonGameCreated": SeasonGameCreated,
+    "SeasonRewardDistributed": SeasonRewardDistributed,
+    "SeasonStakeRecorded": SeasonStakeRecorded,
+    "SeasonEnded": SeasonEnded,
+    "SeasonRewardClaimed": SeasonRewardClaimed,
 }
 
 

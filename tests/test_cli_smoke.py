@@ -15,6 +15,7 @@ def test_default_registry_contains_demo_adapters() -> None:
     assert registry.names() == [
         "outcomes_jsonl_v1",
         "pumpfun_v1",
+        "season1_onchain_jsonl_v1",
         "social_jsonl_v1",
         "solana_rpc_v1",
     ]
